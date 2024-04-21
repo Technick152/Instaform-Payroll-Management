@@ -20,11 +20,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="employeeTable.txt">
-      <Filter>Source Files</Filter>
-    </Text>
     <Text Include="employerPayStub.txt">
       <Filter>Source Files</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Xsd Include="employeeTableClone.txt">
+      <Filter>Source Files</Filter>
+    </Xsd>
+    <Xsd Include="employeeTable.txt">
+      <Filter>Source Files</Filter>
+    </Xsd>
   </ItemGroup>
 </Project>
