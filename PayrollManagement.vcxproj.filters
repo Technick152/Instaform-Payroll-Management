@@ -23,6 +23,9 @@
     <Text Include="employerPayStub.txt">
       <Filter>Source Files</Filter>
     </Text>
+    <Text Include="LoginInfo.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Xsd Include="employeeTableClone.txt">

@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="employerPayStub.txt" />
+    <Text Include="LoginInfo.txt" />
   </ItemGroup>
   <ItemGroup>
     <Xsd Include="employeeTable.txt">

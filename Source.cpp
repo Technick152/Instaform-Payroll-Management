@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
-#include <string>
+#include <string.h>
 #include <stdio.h>
 using namespace std;
 
@@ -16,9 +16,10 @@ void employeeManagement();
 void viewEmployees();
 void editEmployee();
 void removeEmployee();
+void loginScreen();
 
 void main() {
-	title();
+	loginScreen();
 }
 
 void title() {
@@ -82,7 +83,7 @@ void payroll() {
 		title();
 }
 
-void employeeManagement() {
+void employeeManagement(){
 	system("cls");
 	int selectionNum;
 	cout << "EMPLOYEE MANAGEMENT\n\n1. Add Employee\n2. View Employees\n3. Edit Employee\n4. Remove Employee\n5. Exit to title\nSelect Option: ";
@@ -259,4 +260,43 @@ void removeEmployee() {
 	fprintf(fp, "");
 	fclose(fp);
 	employeeManagement();
+}
+
+void loginScreen() {
+	system("cls");
+	char enteredUsername[25], enteredPassword[25], validUsername[25], validPassword[25];
+	int appStarted;
+
+	txtp = fopen("LoginInfo.txt", "r");
+	fscanf(txtp, "%d %s %s", &appStarted, &validUsername, &validPassword);
+	fclose(txtp);
+
+	if(appStarted != 1){
+		cout << "Create Username: ";
+		cin >> enteredUsername;
+		cout << "Create Password: ";
+		cin >> enteredPassword;
+
+		fp = fopen("LoginInfo.txt", "w");
+		fprintf(fp, "%d %s %s", 1, enteredUsername, enteredPassword);
+		fclose(fp);
+		cout << "You will now enter your first employee...\n";
+		system("pause");
+		addEmployee();
+	}
+	else {
+		cout << "Enter Username: ";
+		cin >> enteredUsername;
+		cout << "Enter Password: ";
+		cin >> enteredPassword;
+
+		if (strcmp(enteredUsername, validUsername) + strcmp(enteredPassword, validPassword) == 0) {
+			title();
+		}
+		else {
+			printf("Invalid Username or Password\n");
+			system("pause");
+			loginScreen();
+		}
+	}
 }
