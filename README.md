@@ -9,13 +9,10 @@ you will be prompted to write the full name of the employee which is "First Last
 When you have your employees saved go back to the title and select the "Payroll" option where you will be prompted for the hours worked
 for each employee, this will be saved to "employerPayStub.txt" where you can see the breakdown of the gross pay, net pay, and amount taken out in taxes for each employee.
 There will be a footer showing the total paid to the employees, total paid to taxes, and Overall total paid.
-For now to edit or remove employees you must navigate to the project file "employeeTable.txt" and manually remove or edit the info
 
-ISSUE 1: Removal and Editing of employees/employee information
-    This is hard to do efficiently in the current .txt file format I am using, the obvious solution is to integrate a real data base using SQL or other database like MongoDB.
-I have experimented with SQLite in a previous project but my program was very buggy with the implementation, and I would often corrupt the DB file, until I learn
-how to integrate that my current plan is to just write to a new txt file with the information changed then overwrite "employeeTable.txt" with the new information
-
-ISSUE 2: UI
+Update Plan 1: UI
     This one is pretty easy, I am already working on a port to C#.net framework which I have used in the past, but until I do that the console will do, although
 I could just port to a standard web frontend design which I'm less experienced in but often scales better.
+
+Update Plan 2: Database
+      Currently the data storage system is reading and writing from a txt file, this is good for now because I dont plan on my app being used commercially, with that being said I would like to practice my ability to create real, scaleable full stack apps so I will need a real data solution. I have used mongoDB in a previous project so that is my number 1 consideration for now, but I would also like to explore SQL options like SQLite and MySQL
