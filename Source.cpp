@@ -9,6 +9,8 @@ using namespace std;
 FILE* fp;
 FILE* txtp;
 
+void decrypt(char*);
+void encrypt(char*);
 void title();
 void addEmployee();
 void payroll();
@@ -49,7 +51,7 @@ void payroll() {
 	fp = fopen("employeeTable.txt", "r");
 	txtp = fopen("employerPayStub.txt", "a");
 
-	string date, currentEmployeeFirstName, currentEmployeeLastName;
+	char date[10], currentEmployeeFirstName[25], currentEmployeeLastName[25];
 	int currentEmployeeId;
 	double currentEmployeePayrate, grossToEmployee, netToEmployee, amtTaxed, totalPaidOvr, hoursWorked, totalPaidToEmployees, totalPaidToTaxes;
 	totalPaidToTaxes = totalPaidToEmployees = 0.0;
@@ -57,11 +59,13 @@ void payroll() {
 	cout << "Enter Date of Payroll: ";
 	cin >> date;
 
-	fprintf(txtp, "Payroll for %s\n\n%4s  %8s %17s %16s %20s %17s %16s %21s\n", date.c_str(), "ID", "First Name", "Last Name", "Pay Rate", "Hours Worked", "Gross Pay", "Net Pay", "Amount Taxed");
+	fprintf(txtp, "Payroll for %s\n\n%4s  %8s %17s %16s %20s %17s %16s %21s\n", date, "ID", "First Name", "Last Name", "Pay Rate", "Hours Worked", "Gross Pay", "Net Pay", "Amount Taxed");
 	//prints header with category names
 
 		while (!feof(fp)) {
 			fscanf(fp, "%d %s %s %lf\n", &currentEmployeeId, &currentEmployeeFirstName, &currentEmployeeLastName, &currentEmployeePayrate);
+			decrypt(currentEmployeeFirstName);
+			decrypt(currentEmployeeLastName);
 			printf("Enter Hours worked for %s %s: ", currentEmployeeFirstName, currentEmployeeLastName);
 			cin >> hoursWorked;
 
@@ -127,6 +131,9 @@ void addEmployee() {
 	cout << "Enter a unique Id for this employee: ";
 	cin >> addEmployeeId;
 
+	encrypt(addEmployeeFirstName);
+	encrypt(addEmployeeLastName);
+
 	fprintf(fp, "%d %s %s %.2lf\n", addEmployeeId, addEmployeeFirstName, addEmployeeLastName, addEmployeePayRate);
 
 	fclose(txtp);
@@ -137,12 +144,14 @@ void addEmployee() {
 void viewEmployees() {
 	system("cls");
 	fp = fopen("employeeTable.txt", "r");
-	string currentEmployeeFirstName, currentEmployeeLastName;
+	char currentEmployeeFirstName[25], currentEmployeeLastName[25];
 	double currentEmployeePayrate;
 	int currentEmployeeId;
 	printf("EMPLOYEE VIEW\n\n");
 	while (!feof(fp)) {
 		fscanf(fp, "%d %s %s %lf\n", &currentEmployeeId, &currentEmployeeFirstName, &currentEmployeeLastName, &currentEmployeePayrate);
+		decrypt(currentEmployeeFirstName);
+		decrypt(currentEmployeeLastName);
 		printf("ID: %d NAME: %s %s PAYRATE: $%.2lf/hour\n", currentEmployeeId, currentEmployeeFirstName, currentEmployeeLastName, currentEmployeePayrate);
 	}
 	fclose(fp);
@@ -157,12 +166,14 @@ void editEmployee() {
 
 	system("cls");
 	fp = fopen("employeeTable.txt", "r");
-	string currentEmployeeFirstName, currentEmployeeLastName;
+	char currentEmployeeFirstName[25], currentEmployeeLastName[25];
 	double currentEmployeePayrate;
 	int currentEmployeeId;
 	printf("EMPLOYEE VIEW\n\n");
 	while (!feof(fp)) {
 		fscanf(fp, "%d %s %s %lf\n", &currentEmployeeId, &currentEmployeeFirstName, &currentEmployeeLastName, &currentEmployeePayrate);
+		decrypt(currentEmployeeFirstName);
+		decrypt(currentEmployeeLastName);
 		printf("ID: %d NAME: %s %s PAYRATE: $%.2lf/hour\n", currentEmployeeId, currentEmployeeFirstName, currentEmployeeLastName, currentEmployeePayrate);
 	}
 	fclose(fp);
@@ -177,6 +188,8 @@ void editEmployee() {
 	cin >> newLastName;
 	cout << "Enter New Payrate: ";
 	cin >> newPayrate;
+	encrypt(newFirstName);
+	encrypt(newLastName);
 
 	fp = fopen("employeeTableClone.txt", "a");
 	txtp = fopen("employeeTable.txt", "r");
@@ -218,12 +231,14 @@ void removeEmployee() {
 
 	system("cls");
 	fp = fopen("employeeTable.txt", "r");
-	string currentEmployeeFirstName, currentEmployeeLastName;
+	char currentEmployeeFirstName[25], currentEmployeeLastName[25];
 	double currentEmployeePayrate;
 	int currentEmployeeId;
 	printf("EMPLOYEE VIEW\n\n");
 	while (!feof(fp)) {
 		fscanf(fp, "%d %s %s %lf\n", &currentEmployeeId, &currentEmployeeFirstName, &currentEmployeeLastName, &currentEmployeePayrate);
+		decrypt(currentEmployeeFirstName);
+		decrypt(currentEmployeeLastName);
 		printf("ID: %d NAME: %s %s PAYRATE: $%.2lf/hour\n", currentEmployeeId, currentEmployeeFirstName, currentEmployeeLastName, currentEmployeePayrate);
 	}
 	fclose(fp);
@@ -269,6 +284,8 @@ void loginScreen() {
 
 	txtp = fopen("LoginInfo.txt", "r");
 	fscanf(txtp, "%d %s %s", &appStarted, &validUsername, &validPassword);
+	decrypt(validUsername);
+	decrypt(validPassword);
 	fclose(txtp);
 
 	if(appStarted != 1){
@@ -278,6 +295,8 @@ void loginScreen() {
 		cin >> enteredPassword;
 
 		fp = fopen("LoginInfo.txt", "w");
+		encrypt(enteredUsername);
+		encrypt(enteredPassword);
 		fprintf(fp, "%d %s %s", 1, enteredUsername, enteredPassword);
 		fclose(fp);
 		cout << "You will now enter your first employee...\n";
@@ -298,5 +317,18 @@ void loginScreen() {
 			system("pause");
 			loginScreen();
 		}
+	}
+}
+
+void encrypt(char* data) {
+	char c;
+	for (int i = 0; i <= strlen(data) - 1; i++) {
+		data[i] += '2' + (i * i);
+	}
+}
+
+void decrypt(char* data) {
+	for (int i = 0; i <= strlen(data) - 1; i++) {
+		data[i] -= '2' + (i * i);
 	}
 }
