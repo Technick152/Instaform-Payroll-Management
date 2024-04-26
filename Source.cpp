@@ -12,6 +12,8 @@ FILE* fp;
 FILE* txtp;
 //declares FILE pointers
 
+int firstStartup = 0;
+
 void decrypt(char*);
 void encrypt(char*);
 void title();
@@ -142,6 +144,7 @@ void employeeManagement(){
 	}
 	//switch case for selection and redirection
 }
+//displays employee management options
 
 void addEmployee() {
 	system("cls");
@@ -149,25 +152,36 @@ void addEmployee() {
 	txtp = fopen("employeeTable.txt", "r");
 	//clears screen and initializes FILE pointers
 
-	char addEmployeeFirstName[25];
-	char addEmployeeLastName[25];
+	char addEmployeeFirstName[25], addEmployeeLastName[25];
 	double addEmployeePayRate;
 	int addEmployeeId;
 	//declares needed variables
+
+	while (!feof(txtp)) {
+		fscanf(txtp, "%d %s %s %lf\n", &addEmployeeId, &addEmployeeFirstName, &addEmployeeLastName, &addEmployeePayRate);
+	}
 
 	cout << "Enter employee full name: ";
 	cin >> addEmployeeFirstName >> addEmployeeLastName;
 	cout << "Enter employee pay rate: ";
 	cin >> addEmployeePayRate;
-	cout << "Enter a unique Id for this employee: ";
-	cin >> addEmployeeId;
-	//input prompt for employees name, payrate, and Id
+	//input prompt for employees name, and payrate
 
 	encrypt(addEmployeeFirstName);
 	encrypt(addEmployeeLastName);
 	//encrypts name
 
-	fprintf(fp, "%d %s %s %.2lf\n", addEmployeeId, addEmployeeFirstName, addEmployeeLastName, addEmployeePayRate);
+	if (firstStartup != 0) {
+		addEmployeeId = 1;
+		firstStartup = 0;
+		fprintf(fp, "%d %s %s %.2lf\n", addEmployeeId, addEmployeeFirstName, addEmployeeLastName, addEmployeePayRate);
+		fclose(txtp);
+		fclose(fp);
+		employeeManagement();
+	}
+	//creates unique id for added employee
+
+	fprintf(fp, "%d %s %s %.2lf\n", addEmployeeId + 1, addEmployeeFirstName, addEmployeeLastName, addEmployeePayRate);
 	//prints employee information to employeeTable.txt
 
 	fclose(txtp);
@@ -378,6 +392,7 @@ void loginScreen() {
 
 		cout << "You will now enter your first employee...\n";
 		system("pause");
+		firstStartup = 1;
 		addEmployee();
 		//redirects user to create first employee
 	}//if previous app startup is not detected, account creation is prompted
