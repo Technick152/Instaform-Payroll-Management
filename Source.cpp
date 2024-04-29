@@ -24,6 +24,7 @@ void viewEmployees();
 void editEmployee();
 void removeEmployee();
 void loginScreen();
+void changeLoginInfo();
 //function prototypes
 
 void main() {
@@ -36,11 +37,14 @@ void title() {
 	int selectionNum = 0;
 	//clears screen and delcares selectionNum
 
-	cout << "INSTAFORM\n\n1. Payroll\n2. Employee Management\n3. Exit\nSelect Option: ";
+	cout << "INSTAFORM\n\n0. Change Login Info\n1. Payroll\n2. Employee Management\n3. Exit\nSelect Option: ";
 	cin >> selectionNum;
 	//prommpts selection
 
 	switch (selectionNum) {
+		case 0:
+			changeLoginInfo();
+			break;
 		case 1:
 			payroll();
 			break;
@@ -377,18 +381,7 @@ void loginScreen() {
 	//scans and decrypts valid login info
 
 	if(appStarted != 1){
-		cout << "Create Username: ";
-		cin >> enteredUsername;
-		cout << "Create Password: ";
-		cin >> enteredPassword;
-		//prompts creation of login info
-
-		fp = fopen("LoginInfo.txt", "w");
-		encrypt(enteredUsername);
-		encrypt(enteredPassword);
-		fprintf(fp, "%d %s %s", 1, enteredUsername, enteredPassword);
-		fclose(fp);
-		//encrypts and prints info to File
+		changeLoginInfo();
 
 		cout << "You will now enter your first employee...\n";
 		system("pause");
@@ -429,3 +422,20 @@ void decrypt(char* data) {
 	}
 }
 //decrypts string
+
+void changeLoginInfo() {
+	char newUsername[25], newPassword[25];
+	
+	cout << "Create Username: ";
+	cin >> newUsername;
+	cout << "Create Password: ";
+	cin >> newPassword;
+	//prompts creation of login info
+
+	fp = fopen("LoginInfo.txt", "w");
+	encrypt(newUsername);
+	encrypt(newPassword);
+	fprintf(fp, "%d %s %s", 1, newUsername, newPassword);
+	fclose(fp);
+	//encrypts and prints info to File
+}
